@@ -1,4 +1,5 @@
 #include"../headers/sniffer.h"
+int cpt = 0;
 
 int main()
 {
@@ -7,7 +8,8 @@ int main()
 		
 	unsigned char *buffer = (unsigned char *) malloc(65536);
 	
-	logfile=fopen("logs/log.txt","w");
+	logfile=fopen("logs/log.json","w");
+	fprintf(logfile , "{\n\t\"Packets\" : [\n");
 	if(logfile==NULL) 
 	{
 		printf("Unable to create log.txt file.");
@@ -24,7 +26,7 @@ int main()
 		perror("Socket Error");
 		return 1;
 	}
-	while(1)
+	while(cpt <= 50)
 	{
 		saddr_size = sizeof saddr;
 		//Receive a packet
@@ -36,8 +38,10 @@ int main()
 		}
 		//Now process the packet
 		ProcessPacket(buffer , data_size);
+		cpt++;
 	}
 	close(sock_raw);
+	fprintf(logfile , "\n\t]\n}");
 	printf("Finished");
 	return 0;
 }

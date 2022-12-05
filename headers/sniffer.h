@@ -30,6 +30,6 @@ void PrintData (unsigned char* , int);
 
 extern FILE *logfile;
 extern struct sockaddr_in source,dest; //source and destination socket address 
-
+extern int cpt;
 
 #endif

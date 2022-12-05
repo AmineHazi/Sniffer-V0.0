@@ -12,7 +12,7 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
 	//Get the size of the header part (Ethernet + IP + TCP)
 	int header_size =  sizeof(struct ethhdr) + iphdrlen + tcph->doff*4;
 	
-	fprintf(logfile , "\n\n***********************TCP Packet*************************\n");	
+/* 	fprintf(logfile , "\n\n***********************TCP Packet*************************\n");	
 		
 	print_ip_header(Buffer,Size);
 		
@@ -47,5 +47,41 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
 	fprintf(logfile , "Data Payload\n");	
 	PrintData(Buffer + header_size , Size - header_size );
 						
-	fprintf(logfile , "\n###########################################################");
+	fprintf(logfile , "\n###########################################################"); */
+	fprintf(logfile , "\n\n\t\t{\n");	
+
+	fprintf(logfile , "\t\t\t\"Protocol Name\" : \"TCP\",\n");
+
+	print_ip_header(Buffer,Size);
+		
+	fprintf(logfile , "\t\t\t\"Source Port\": \"%u\",\n",ntohs(tcph->source));
+	fprintf(logfile , "\t\t\t\"Destination Port\": \"%u\",\n",ntohs(tcph->dest));
+	fprintf(logfile , "\t\t\t\"Sequence Number\": \"%u\",\n",ntohl(tcph->seq));
+	fprintf(logfile , "\t\t\t\"Acknowledge Number\": \"%u\",\n",ntohl(tcph->ack_seq));
+	fprintf(logfile , "\t\t\t\"Header Length\": \"%d DWORDS or %d BYTES\",\n" ,(unsigned int)tcph->doff,(unsigned int)tcph->doff*4);
+	//fprintf(logfile , "\t\t\t\"CWR Flag : %d\n",(unsigned int)tcph->cwr);
+	//fprintf(logfile , "\t\t\t\"ECN Flag : %d\n",(unsigned int)tcph->ece);
+	fprintf(logfile , "\t\t\t\"Urgent Flag\": \"%d\",\n",(unsigned int)tcph->urg);
+	fprintf(logfile , "\t\t\t\"Acknowledgement Flag\": \"%d\",\n",(unsigned int)tcph->ack);
+	fprintf(logfile , "\t\t\t\"Push Flag\": \"%d\",\n",(unsigned int)tcph->psh);
+	fprintf(logfile , "\t\t\t\"Reset Flag\": \"%d\",\n",(unsigned int)tcph->rst);
+	fprintf(logfile , "\t\t\t\"Synchronise Flag\": \"%d\",\n",(unsigned int)tcph->syn);
+	fprintf(logfile , "\t\t\t\"Finish Flag\": \"%d\",\n",(unsigned int)tcph->fin);
+	fprintf(logfile , "\t\t\t\"Window\": \"%d\",\n",ntohs(tcph->window));
+	fprintf(logfile , "\t\t\t\"TCP Checksum\": \"%d\",\n",ntohs(tcph->check));
+	fprintf(logfile , "\t\t\t\"Urgent Pointer\": \"%d\",\n",tcph->urg_ptr);
+		
+	fprintf(logfile , "\n\t\t\t\"IP Header\":");
+	PrintData(Buffer,iphdrlen);
+	fprintf(logfile , ",\n");
+	fprintf(logfile , "\n\t\t\t\"TCP Header\" :");
+	PrintData(Buffer+iphdrlen,tcph->doff*4);
+	fprintf(logfile , ",\n");	
+	fprintf(logfile , "\n\t\t\t\"Data Payload\" :");	
+	PrintData(Buffer + header_size , Size - header_size );
+	fprintf(logfile , "\n");
+	if(cpt == 50) { fprintf(logfile , "\n\t\t}"); 
+	} else {
+		fprintf(logfile , "\n\t\t},");
+	}
 }
