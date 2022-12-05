@@ -1,6 +1,8 @@
 #include"../headers/sniffer.h"
 
 int tcp=0,udp=0,icmp=0,others=0,igmp=0,total=0,i,j;	//Counters
+FILE *logfile;
+struct sockaddr_in source,dest; //source and destination socket address 
 
 void ProcessPacket(unsigned char* buffer, int size)
 {

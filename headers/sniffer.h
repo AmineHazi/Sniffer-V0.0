@@ -28,8 +28,8 @@ void print_udp_packet(unsigned char * , int );
 void print_icmp_packet(unsigned char* , int );
 void PrintData (unsigned char* , int);
 
-FILE *logfile;
-struct sockaddr_in source,dest; //source and destination socket address 
+extern FILE *logfile;
+extern struct sockaddr_in source,dest; //source and destination socket address 
 
 
 #endif
