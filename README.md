@@ -1,6 +1,8 @@
 # Sniffer-V0.0
 
-TO BUILD : 
+## A little Packet sniffer made in C
+
+### TO BUILD : 
    - Using Make : "make sniffer"
    - Without Make : "gcc build/main.c build/sniffer.c protocols/tcp.c protocols/udp.c protocols/icmp.c && sudo ./a.out"
 
